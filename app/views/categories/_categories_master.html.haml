@@ -1,0 +1,44 @@
+#category_master
+	.btnBox.text-right
+		= link_to new_category_path(@category), remote: true, class: "btn btn-primary btn-lg" do
+			%i.fa.fa-plus
+			Add new
+	.table-responsive.itemsTableBox
+		%table.table.table-striped.categoriesTable
+			%thead
+				%tr
+					%th Name
+					%th  # of Products
+					%th
+			%tbody
+				- @categories.each do |category|
+					%tr{id: "row_#{tier.id}"}
+						%td= category.name
+						%td= category.products.count
+						%td.actions.text-right
+							= link_to fa_icon("pencil"), edit_category_url(id: category.id), remote: true
+							= link_to fa_icon("trash"), category_url(category), remote: true, title: "Delete", method: :delete, action: :destroy, data: { confirm: "Are you sure you want to delete this category?" }
+
+	#category_modal.modal.fade
+
+:javascript
+	$('.categoriesTable').DataTable( {
+		"language": {
+		"search": "",
+		"lengthMenu": "Display _MENU_ Categories per page",
+		"zeroRecords": "No Categories Found - Click 'Add New' to create one.",
+		"info": "Showing _START_ to _END_ of _TOTAL_ Total Categories",
+		"infoEmpty": "No Categories Here - Click 'Add New' to create one.",
+		"searchPlaceholder": "Search Categories..."
+		},
+		"bPaginate": false,
+		"bLengthChange": false,
+		"bFilter": true,
+		"bInfo": false,
+		"bAutoWidth": false,
+		"aoColumns": [
+			null,
+			null,
+			{ "bSortable": false }
+		]
+	} );

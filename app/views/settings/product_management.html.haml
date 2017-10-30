@@ -1,0 +1,10 @@
+- page_title "Product Management"
+-# - content_for :action_button do
+  -# = link_to "Create Product", new_product_path, class: "btn btn-primary", target: "_self"
+
+.loadingFrame
+  = render "common/loading_animation"
+.contentMasterFrame{style: "display: none;"}
+  = render partial: "settings", locals: {locals: {categories: @categories, products: @products, category: @category, product: @product}}
+
+= render :partial => "common/loading_script"

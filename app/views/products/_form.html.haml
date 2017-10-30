@@ -1,0 +1,115 @@
+= form_for @product, remote: true do |f|
+    .modal-body
+        .inputBox
+            .row
+                .col-xs-12.form-group
+                    = f.label :name, "Name: "
+                    = f.text_field :name, class: "form-control"
+            .row
+                .col-xs-12.form-group
+                    = f.label :description, "Description: "
+                    = f.text_area :description, class: "form-control"
+            .row
+                .col-xs-12.col-lg-6.form-group
+                    = f.label :brand, "Brand: "
+                    = f.text_field :brand, class: "form-control"
+                .col-xs-12.col-lg-6.form-group
+                    = f.label :amount_available, "Inventory: "
+                    = f.text_field :amount_available, class: "form-control"
+            .row
+                .col-xs-12.col-lg-6.form-group
+                    = f.label :upc, "UPC: "
+                    = f.text_field :upc, class: "form-control"
+                .col-xs-12.col-lg-6.form-group
+                    = f.label :active_ingredient, "Active Ingredient(s): "
+                    = f.text_field :active_ingredient, class: "form-control"
+
+
+                .row
+                    .col-xs-12.form-group.categoryGroup
+                        = f.hidden_field :category_id, class: "categoryField"
+                        = f.label :category_id, "Select a Category"
+                        .dropdown.formDropdown
+                            %button.btn.dropdown-toggle.categoryDropdown{"data-toggle" => "dropdown", :type => "button"}
+                                %span.categoryDropdownTitle None
+                                %span.caret
+                            %ul.dropdown-menu
+                                %li.dropdownSearch
+                                    %input.form-control{type:"text", placeholder:"Search for categories.."}
+                                %li
+                                    - unless @categories.blank?
+                                        - @categories.each do |category|
+                                            %li
+                                                = link_to category.name, "#", data: {item: "#{category.name}"}, remote: true, class: "categoryItem"
+
+    .modal-footer
+        .row
+            .col-xs-6.text-left
+                = link_to "Cancel", "#", class: "btn btn-default cancelBtn", data: { dismiss: "modal" }, type: "button"
+            .col-xs-6.text-right
+                = f.button :submit, class: "btn btn-primary submitBtn btn-add-listing", data: { disable_with: "Please wait…" } do
+                    Save
+- if controller.action_name === "edit"
+    :javascript
+        $(document).ready(function() {
+            // var value = $(".sportField").val();
+            // $(".sportsDropdownTitle").text(value);
+            // // Check boxes if values are same as name
+            // $(".sameAsName").each(function() {
+            //     var field = $(this).data("value");
+            //     var nameValue = $(".sectionItemName").val();
+            //     if($("."+field).val() === nameValue) {
+            //         $(this).prop('checked', true);
+            //     }
+            // });
+        });
+
+:javascript
+
+    $(document).ready(function() {
+        $(".subjectField").each(function(){
+            setCategorySubject($(this).val())
+            $('input.tokenize').tokenfield();
+        });
+        $(".templateField").each(function(){
+            setItemTemplate($(this).val())
+        });
+    });
+
+    $('input.tokenize').on('tokenfield:removedtoken', function (e) {
+        var value = e.attrs.value;
+    })
+    $('input.tokenize').on('tokenfield:createdtoken', function (e) {
+    })
+
+    $(".categoryItem").click(function() {
+        var value = $(this).data("sport");
+        $(this).closest(".categoryGroup").find(".categoryDropdownTitle").text(value);
+        $(this).closest(".categoryGroup").find(".dropdown-toggle").dropdown("toggle");
+        $(this).closest(".categoryGroup").find(".categoryField").val(value);
+    });
+
+    $(".catSubject").click(function() {
+        var value = $(this).data("value");
+        var currentValue = $(".subjectField").val();
+        if ($(this).is(':checked') && currentValue.indexOf(value) !== 0) {
+            newValue = currentValue.concat(value+" ");
+        } else {
+            newValue = currentValue.replace(value+" ", "");
+        }
+        $(".subjectField").val(newValue);
+    });
+    function setCategorySubject(value) {
+        if(value === "") {
+            return
+        }
+        $(".catSubject").each(function() {
+            var checkBoxValue = $(this).data("value");
+            if (~value.indexOf(checkBoxValue)){
+                $(this).attr('checked', true);
+            }
+        });
+    }
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });

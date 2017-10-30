@@ -1,0 +1,10 @@
+:javascript
+   $(".loadingFrame").fadeIn("slow");
+   $(document).ready(function(){
+      setTimeout(function(){
+         $(".loadingFrame").hide();
+         setTimeout(function(){
+            $(".contentMasterFrame").fadeIn(500);
+         },50);
+      },1100);
+   });

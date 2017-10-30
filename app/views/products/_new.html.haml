@@ -1,0 +1,5 @@
+.modal-dialog
+    .modal-content
+        .modal-header
+            %h3 Add Product
+        = render partial: "form", locals: {product: @product, categories: @categories}

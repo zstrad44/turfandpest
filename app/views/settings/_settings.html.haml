@@ -1,0 +1,31 @@
+.col-lg-12#list_management
+	.panel.panel-default
+		.panel-body
+			%ul.nav.nav-tabs
+				%li
+					%a{data: {toggle: "tab"}, href: "#categories"} Categories
+				%li
+					%a{data: {toggle: "tab"}, href: "#products"} Products
+
+			.tab-content#itemsTable_wrapper
+				.tab-pane.fade#categories
+					= render "categories/categories_master", locals: {categories: @categories, category: @category}
+				.tab-pane.fade#products
+					= render "products/products_master", locals: {products: @products, product: @product, categories: @categories, category: @category}
+
+			#product_modal.modal.fade
+
+:javascript
+	// Sets the current tab id to local storage
+	$(function() {
+	    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+	        localStorage.setItem('lastTab', $(this).attr('href'));
+	    });
+	});
+	// Returns to the last opened tab based on localStorage
+	$(document).ready(function() {
+		var lastTab = localStorage.getItem('lastTab');
+		if (lastTab) {
+		    $('[href="' + lastTab + '"]').tab('show');
+		}
+	});
